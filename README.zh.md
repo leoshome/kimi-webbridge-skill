@@ -19,6 +19,44 @@ kimi-webbridge/                ← skill 資料夾，可直接複製到 agent �
     └── operations.md          ← 安裝、啟動、診斷手冊
 ```
 
+## Windows 二進位備份
+
+本倉庫包含 `kimi-webbridge` daemon 二進位檔案的備份，方便在無法使用官方安裝腳本時（沒 PowerShell、沒網路、CDN 掛了等）離線使用。此備份只包含 Windows `amd64` 版本。
+
+```
+.kimi-webbridge/
+  bin/
+    kimi-webbridge.exe      ← Windows amd64 二進位
+```
+
+### 版本
+
+| 欄位       | 值 |
+|------------|---|
+| 版本       | **v1.9.16** |
+| 來源       | `https://cdn.kimi.com/webbridge/v1.9.16/releases/kimi-webbridge-windows-amd64.exe` |
+| 大小       | 10,223,616 bytes（約 10 MB） |
+| SHA256     | `7cf38d2c3dfc8365ec9fb351624f7a8fc7681a76f129cd8bbcdf0127be4ff1af` |
+| 下載日期   | 2026-06-02 |
+
+> CDN 只保留最近的版本，所有 v1.9.5 以前的版本（包括 v1.0.0、v1.8.0、整個 v0.x 系列）皆回傳 404。此備份保留 v1.9.16 確保可穩定取用。
+
+### 如何使用此備份
+
+> 需 PowerShell 5+ 與網路（**不需要 git**）。以下路徑皆為絕對路徑，可從任何目錄執行。
+
+1. **下載 repo ZIP**：從 `https://github.com/leoshome/kimi-webbridge-skill/archive/refs/heads/master.zip` 下載並解壓縮到暫存目錄（例如 `%TEMP%\kimi-webbridge-skill-master`）。
+2. **搬移 binary 資料夾**：把解壓縮後的 `.kimi-webbridge/` 整個資料夾搬到使用者目錄（`%USERPROFILE%`），最終位置是 `C:\Users\<你的帳號>\.kimi-webbridge\`，裡面的 `bin\kimi-webbridge.exe` 就是 daemon 主程式。
+3. **搬移 skill 資料夾**：把 `kimi-webbridge/` 資料夾搬到對應的 agent skills 目錄（依你的 agent 擇一）：
+   | Agent                  | 目標路徑 |
+   |------------------------|---------|
+   | OpenCode / Claude Code | `%USERPROFILE%\.claude\skills\kimi-webbridge\` |
+   | Kimi Code              | `%USERPROFILE%\.kimi-code\skills\kimi-webbridge\` |
+   | 通用 agent              | `%USERPROFILE%\.agents\skills\kimi-webbridge\` |
+4. **把 binary 資料夾加入 PATH**：在「使用者環境變數」（非系統）的 `Path` 附加 `%USERPROFILE%\.kimi-webbridge\bin`，讓 `kimi-webbridge` 在任何目錄都能執行。
+5. **啟動 daemon**：執行 `kimi-webbridge start`，然後用 `kimi-webbridge status`（或 `curl http://127.0.0.1:10086/health`）驗證。
+6. **清理**下載的 ZIP 與解壓縮的暫存資料夾（選擇性）。
+
 ## 前置需求
 
 從 Chrome Web Store 安裝 [Kimi WebBridge](https://chromewebstore.google.com/detail/kimi-webbridge/fldmhceldgbpfpkbgopacenieobmligc)。

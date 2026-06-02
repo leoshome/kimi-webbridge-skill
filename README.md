@@ -19,6 +19,58 @@ kimi-webbridge/                ← skill folder, copy directly to your agent's s
     └── operations.md          ← install, start, diagnose guide
 ```
 
+## Windows Binary Backup
+
+This repo includes a backup of the `kimi-webbridge` daemon binary for offline use when the official installer is unavailable (no PowerShell, no internet, CDN down, etc.). Only the Windows `amd64` build is backed up here.
+
+```
+.kimi-webbridge/
+  bin/
+    kimi-webbridge.exe      ← Windows amd64 binary
+```
+
+### Version
+
+| Field      | Value |
+|------------|-------|
+| Version    | **v1.9.16** |
+| Source     | `https://cdn.kimi.com/webbridge/v1.9.16/releases/kimi-webbridge-windows-amd64.exe` |
+| Size       | 10,223,616 bytes (~10 MB) |
+| SHA256     | `7cf38d2c3dfc8365ec9fb351624f7a8fc7681a76f129cd8bbcdf0127be4ff1af` |
+| Downloaded | 2026-06-02 |
+
+### How to use this backup
+
+1. **Copy the binary to `%USERPROFILE%\.kimi-webbridge\bin` and add to user `PATH`**:
+
+   ```powershell
+   # Clone the repository to a temporary folder
+   git clone --depth 1 https://github.com/leoshome/kimi-webbridge-skill.git "$env:TEMP\kimi-webbridge-skill"
+   # Move the .kimi-webbridge folder to the user home folder
+   Move-Item -Path "$env:TEMP\kimi-webbridge-skill\.kimi-webbridge" -Destination "$env:USERPROFILE\" -Force
+   # Clean up the cloned repository folder
+   Remove-Item -Path "$env:TEMP\kimi-webbridge-skill" -Recurse -Force
+   # Add the bin directory to user PATH
+   $bin = "$env:USERPROFILE\.kimi-webbridge\bin"
+   [Environment]::SetEnvironmentVariable("Path", ([Environment]::GetEnvironmentVariable("Path", "User") + ";$bin"), "User")
+   $env:Path += ";$bin"
+   ```
+
+2. **Move the skill folder** (`kimi-webbridge/`) into your agent's skills directory — pick the one that matches your agent:
+   | Agent                  | Destination path |
+   |------------------------|------------------|
+   | OpenCode / Claude Code | `%USERPROFILE%\.claude\skills\kimi-webbridge\` |
+   | Kimi Code              | `%USERPROFILE%\.kimi-code\skills\kimi-webbridge\` |
+   | Generic agent          | `%USERPROFILE%\.agents\skills\kimi-webbridge\` |
+
+4. **Start the daemon** and verify:
+
+   ```powershell
+   kimi-webbridge start
+   kimi-webbridge status
+   curl http://127.0.0.1:10086/health
+   ```
+
 ## Prerequisites
 
 Install [Kimi WebBridge](https://chromewebstore.google.com/detail/kimi-webbridge/fldmhceldgbpfpkbgopacenieobmligc) from Chrome Web Store.
