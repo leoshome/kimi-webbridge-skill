@@ -19,6 +19,57 @@ kimi-webbridge/                ← skill folder, copy directly to your agent's s
     └── operations.md          ← install, start, diagnose guide
 ```
 
+## For AI Agents — Installation Prompt
+
+If you are an AI agent (e.g. Claude Code, OpenCode, Kimi Code, or any coding agent) and the user wants you to install Kimi WebBridge, use the following steps:
+
+> **Copy-paste this block into your agent's context to let it install automatically:**
+
+```
+Please install the Kimi WebBridge skill so I can control my browser.
+
+Steps:
+1. Run the official installer for my OS:
+   - macOS / Linux: curl -fsSL https://cdn.kimi.com/webbridge/install.sh | bash
+   - Windows (PowerShell): irm https://cdn.kimi.com/webbridge/install.ps1 | iex
+
+2. If the CDN is unreachable, use the offline backup from:
+   https://github.com/leoshome/kimi-webbridge-skill
+
+   - Download the ZIP, extract it, and move:
+     a. `.kimi-webbridge/` → `%USERPROFILE%\.kimi-webbridge\` (Windows) or `~/.kimi-webbridge/` (macOS/Linux)
+     b. `kimi-webbridge/` skill folder → your agent's skills directory:
+        - Claude Code / OpenCode: ~/.claude/skills/kimi-webbridge/
+        - Kimi Code: ~/.kimi-code/skills/kimi-webbridge/
+        - Generic agent: ~/.agents/skills/kimi-webbridge/
+
+3. Add `~/.kimi-webbridge/bin` (or `%USERPROFILE%\.kimi-webbridge\bin` on Windows) to PATH.
+
+4. Start and verify the daemon:
+   kimi-webbridge start
+   kimi-webbridge status
+   curl http://127.0.0.1:10086/health
+
+5. Install the Chrome extension from:
+   https://chromewebstore.google.com/detail/kimi-webbridge/fldmhceldgbpfpkbgopacenieobmligc
+
+After setup, load the skill file at kimi-webbridge/SKILL.md to learn the available browser-control tools.
+```
+
+### What the agent will be able to do after installation
+
+| Action | API call |
+|--------|----------|
+| Open a URL in a new tab | `navigate` |
+| Read page accessibility tree | `snapshot` |
+| Take a screenshot | `screenshot` |
+| Click an element | `click` |
+| Fill an input field | `fill` |
+| Scroll the page | `scroll` |
+| Run JavaScript | `evaluate` |
+
+For the full tool list see [`kimi-webbridge/SKILL.md`](kimi-webbridge/SKILL.md).
+
 ## Windows Binary Backup
 
 This repo includes a backup of the `kimi-webbridge` daemon binary for offline use when the official installer is unavailable (no PowerShell, no internet, CDN down, etc.). Only the Windows `amd64` build is backed up here.

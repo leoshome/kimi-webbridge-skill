@@ -19,6 +19,57 @@ kimi-webbridge/                ← skill 資料夾，可直接複製到 agent �
     └── operations.md          ← 安裝、啟動、診斷手冊
 ```
 
+## For AI Agents — 安裝 Prompt
+
+如果你是 AI agent（例如 Claude Code、OpenCode、Kimi Code 或任何 coding agent），使用者希望你安裝 Kimi WebBridge，請按照以下步驟操作：
+
+> **將以下區塊貼入你的 agent 對話，讓它自動完成安裝：**
+
+```
+請幫我安裝 Kimi WebBridge skill，讓我可以用 AI agent 控制瀏覽器。
+
+步驟如下：
+1. 依照我的作業系統執行官方安裝腳本：
+   - macOS / Linux：curl -fsSL https://cdn.kimi.com/webbridge/install.sh | bash
+   - Windows（PowerShell）：irm https://cdn.kimi.com/webbridge/install.ps1 | iex
+
+2. 如果 CDN 無法存取，請改用離線備份：
+   https://github.com/leoshome/kimi-webbridge-skill
+
+   - 下載 ZIP 並解壓縮，然後搬移：
+     a. `.kimi-webbridge/` → `%USERPROFILE%\.kimi-webbridge\`（Windows）或 `~/.kimi-webbridge/`（macOS/Linux）
+     b. `kimi-webbridge/` skill 資料夾 → 對應 agent 的 skills 目錄：
+        - Claude Code / OpenCode：~/.claude/skills/kimi-webbridge/
+        - Kimi Code：~/.kimi-code/skills/kimi-webbridge/
+        - 通用 agent：~/.agents/skills/kimi-webbridge/
+
+3. 將 `~/.kimi-webbridge/bin`（Windows 為 `%USERPROFILE%\.kimi-webbridge\bin`）加入 PATH。
+
+4. 啟動並確認 daemon：
+   kimi-webbridge start
+   kimi-webbridge status
+   curl http://127.0.0.1:10086/health
+
+5. 安裝 Chrome 擴充功能：
+   https://chromewebstore.google.com/detail/kimi-webbridge/fldmhceldgbpfpkbgopacenieobmligc
+
+安裝完成後，載入 kimi-webbridge/SKILL.md 以了解所有可用的瀏覽器控制工具。
+```
+
+### 安裝後 agent 可執行的操作
+
+| 操作 | API 動作 |
+|------|----------|
+| 開啟網址（新分頁） | `navigate` |
+| 讀取頁面 accessibility tree | `snapshot` |
+| 截圖 | `screenshot` |
+| 點擊元素 | `click` |
+| 填寫輸入框 | `fill` |
+| 捲動頁面 | `scroll` |
+| 執行 JavaScript | `evaluate` |
+
+完整工具列表請見 [`kimi-webbridge/SKILL.md`](kimi-webbridge/SKILL.md)。
+
 ## Windows 二進位備份
 
 本倉庫包含 `kimi-webbridge` daemon 二進位檔案的備份，方便在無法使用官方安裝腳本時（沒 PowerShell、沒網路、CDN 掛了等）離線使用。此備份只包含 Windows `amd64` 版本。
